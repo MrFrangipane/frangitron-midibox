@@ -1,3 +1,5 @@
-cd /home/frangi/frangitron/frangitron-midibox
+cd ~/frangitron/frangitron-midibox
 make -j8
-bash /home/frangi/mios_studio.sh --upload_hex=/home/frangi/frangitron/frangitron-midibox/project.hex
+cd ~/midibox/mios32/trunk/tools/mios_studio/Builds/Linux/build
+./MIOS_Studio_Debug --upload_hex=/home/frangi/frangitron/frangitron-midibox/project.hex
+
