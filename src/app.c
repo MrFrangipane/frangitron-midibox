@@ -5,6 +5,8 @@
 #include <mios32.h>
 #include "app.h"
 
+
+
 /////////////////////////////////////////////////////////////////////////////
 // Local definitions
 /////////////////////////////////////////////////////////////////////////////
@@ -79,6 +81,16 @@ void APP_MIDI_Tick(void)
 /////////////////////////////////////////////////////////////////////////////
 void APP_MIDI_NotifyPackage(mios32_midi_port_t port, mios32_midi_package_t midi_package)
 {
+  // forward packages USB0->UART0 and UART0->USB0
+  switch( port ) {
+    case USB0:
+      MIOS32_MIDI_SendPackage(UART0, midi_package);
+      break;
+
+    case UART0:
+      MIOS32_MIDI_SendPackage(USB0, midi_package);
+      break;
+  }
 }
 
 
@@ -112,8 +124,8 @@ void APP_SRIO_ServicePrepare(void)
   {
     if(enc_pushed[i] != enc_pushed_previous[i])
     {
-        enc_pushed_previous[i] = enc_pushed[i];
-        MIOS32_MIDI_SendCC(DEFAULT, Chn1, 20 + i, (1 - enc_pushed[i]) * 127);
+      enc_pushed_previous[i] = enc_pushed[i];
+      MIOS32_MIDI_SendCC(DEFAULT, Chn16, 20 + i, (1 - enc_pushed[i]) * 127);
     }
   }
 }
